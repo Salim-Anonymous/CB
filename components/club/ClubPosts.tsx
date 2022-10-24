@@ -2,10 +2,11 @@ import { ChatIcon, BookmarkIcon, DotsHorizontalIcon, HeartIcon, PaperAirplaneIco
 import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp } from "firebase/firestore";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { db } from "../firebase";
-import Post from "./Post";
+import { db } from "../../firebase";
+import Post from "../Post";
+import ClubPost from "./ClubPost";
 
-function Posts() {
+function ClubPosts() {
 
     const [posts, setPosts] = useState([]);
 
@@ -23,8 +24,11 @@ function Posts() {
 
     return (
         <div className="">
+            <div>
+                Cover
+            </div>
             {posts.map((post) => (
-                <Post
+                <ClubPost
                     key={post.id}
                     id={post.id}
                     username={post.data().username}
@@ -37,4 +41,4 @@ function Posts() {
     );
 }
 
-export default Posts
+export default ClubPosts

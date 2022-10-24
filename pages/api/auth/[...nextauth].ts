@@ -22,7 +22,6 @@ export const authOptions = {
       session.user.uid = token.sub
       return session
     }
-
   }
 }
 export default NextAuth(authOptions)
