@@ -1,4 +1,5 @@
 import {faker, SexType} from "@faker-js/faker";
+import { useSession } from "next-auth/react";
 import {useEffect, useState} from "react";
 
 type SubscriptionTier = 'free' | 'basic' | 'business';
@@ -29,7 +30,7 @@ function createRandomUser(): User {
 
 
 export function Stories(){
-
+    const {data: session} = useSession();
     const [suggestions,setSuggestions] = useState([]);
 
     useEffect(() => {
@@ -42,6 +43,7 @@ export function Stories(){
         <div className="flex space-x-4 p-6 bg-white mt-8
         border-gray-200 border rounded-sm overflow-x-scroll
         scrollbar-thin scrollbar-thumb-black">
+            {session?<Story username={session?.user?.username} img={session?.user?.image} />:""}
             {suggestions.map((profile: User) => (
                 <Story
                     key={profile._id}

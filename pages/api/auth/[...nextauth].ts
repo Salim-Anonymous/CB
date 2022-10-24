@@ -16,5 +16,13 @@ export const authOptions = {
   pages: {
     signIn:"/auth/signin",
   },
+  callbacks:{
+    async session({session,token,user}){
+      session.user.username = session.user.name.split(" ")[0].toLowerCase()
+      session.user.uid = token.sub
+      return session
+    }
+
+  }
 }
 export default NextAuth(authOptions)

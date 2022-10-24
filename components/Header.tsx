@@ -9,24 +9,28 @@ import {
 } from '@heroicons/react/outline';
 import {HomeIcon} from "@heroicons/react/solid";
 import { signIn, signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { modalAtom } from '../atoms/modalAtom';
+import { useRecoilState } from 'recoil';
 
 function Header() {
 
     const { data:session } = useSession();
-    console.log(session);
+    const router = useRouter();
+    const [open,setOpen] = useRecoilState(modalAtom);
 
     return(
         <div className="shadow-sm border-b-1 bg-white sticky top-0 z-50">
             <div className="flex justify-between bg-white max-w-6xl mx-5 xl:mx-auto">
                 {/*Left*/}
-                <div className="relative hidden lg:inline-grid w-32 cursor-pointer">
+                <div onClick={()=>router.push('/')} className="relative hidden lg:inline-grid w-32 cursor-pointer">
                     <Image
                         src="/image/logo.svg"
                         layout="fill"
                         objectFit="contain"
                     />
                 </div>
-                <div className="relative w-10 lg:hidden flex-shrink-0 cursor-pointer">
+                <div onClick={()=>router.push('/')} className="relative w-10 lg:hidden flex-shrink-0 cursor-pointer">
                     <Image
                         src="/image/logo-no-background.svg"
                         layout="fill"
@@ -48,7 +52,7 @@ function Header() {
                 </div>
                 {/*Right*/}
                 <div className="flex items-center justify-end space-x-4">
-                    <HomeIcon className="navBtn"/>
+                    <HomeIcon onClick={()=>router.push('/')} className="navBtn"/>
                     <MenuIcon className="h-6 w-6 md:hidden
                 cursor-pointer"/>
                     {session ? (<><div className="relative navBtn ">
@@ -57,7 +61,10 @@ function Header() {
                     bg-red-500 rounded-full flex items-center justify-center
                     animate-pulse text-white">3</div>
                     </div>
-                    <PlusCircleIcon className="navBtn"/>
+                    <PlusCircleIcon onClick={()=>setOpen({
+                        isOpen:true,
+                        content:"open modal"
+                    })} className="navBtn"/>
                     <UserGroupIcon className="navBtn"/>
                     <HeartIcon className="navBtn"/>
                     <img
@@ -79,3 +86,4 @@ function Header() {
 }
 
 export default Header
+
