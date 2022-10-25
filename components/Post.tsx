@@ -10,11 +10,13 @@ function Post({
     username,
     userImg,
     img,
+    timestamp,
     caption, }: {
         id: any,
         username: string,
         userImg: string,
         img: string,
+        timestamp: any,
         caption: string,
     }) {
 
@@ -83,6 +85,9 @@ function Post({
             <div className="flex items-center p-5">
                 <img src={userImg} alt={username} className="rounded-full h-12 w-12 object-contain border p-1 mr-3" />
                 <p className="flex-1 font-bold">{username}</p>
+                <Moment fromNow className="pr-5 text-xs text-gray-400">
+                                {timestamp?.toDate()}
+                </Moment>
                 <DotsHorizontalIcon className="h-5" />
             </div>
             {/* Img */}
@@ -91,13 +96,13 @@ function Post({
             {session && (<div className="flex justify-between px-4 pt-4">
                 <div className="flex space-x-4">
                     <HeartIcon
-                        className="btn"
+                        className="btnCus"
                         onClick={likePost}
                     />
-                    <ChatIcon className="btn" />
-                    <PaperAirplaneIcon className="btn" />
+                    <ChatIcon className="btnCus" />
+                    <PaperAirplaneIcon className="btnCus" />
                 </div>
-                <BookmarkIcon className="btn" />
+                <BookmarkIcon className="btnCus" />
             </div>)}
             {/* Caption */}
             <p className="p-5 truncate">

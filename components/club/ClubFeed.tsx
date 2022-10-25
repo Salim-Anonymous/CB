@@ -5,6 +5,7 @@ import Suggestions from "../suggestions";
 import { useSession } from "next-auth/react";
 import ClubList from "./ClubList";
 import ClubPosts from "./ClubPosts";
+import Members from "./members";
 
 function ClubFeed({clubId}:{clubId:string|string[]}) {
 
@@ -28,6 +29,7 @@ function ClubFeed({clubId}:{clubId:string|string[]}) {
 
                     {/* Suggestions */}
                     <Suggestions />
+                    <Members />
                 </div>
             </section>
         </main>

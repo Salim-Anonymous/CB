@@ -8,7 +8,7 @@
     cursor-pointer hover:scale-125 transition
     duration-100 transform ease-out;
   }
-  .btn{
+  .btnCus{
     @apply h-7 hover:scale-125 cursor-pointer transition-all duration-150 ease-out;
   }
 }

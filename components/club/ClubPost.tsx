@@ -7,6 +7,7 @@ import Moment from 'react-moment';
 
 function ClubPost({
     id,
+    clubId,
     username,
     userImg,
     img,
@@ -14,6 +15,7 @@ function ClubPost({
         id: any,
         username: string,
         userImg: string,
+        clubId: string,
         img: string,
         caption: string,
     }) {
@@ -26,7 +28,7 @@ function ClubPost({
 
     useEffect(() => {
         const data = onSnapshot(
-            query(collection(db, 'posts', id, 'comments'), orderBy('timestamp', 'desc')),
+            query(collection(db, 'clubs',`${clubId}`,'activities', id, 'comments'), orderBy('timestamp', 'desc')),
             snapshot => {
                 setComments(snapshot.docs);
             })
@@ -36,7 +38,7 @@ function ClubPost({
 
     useEffect(() => {
         const data = onSnapshot(
-            query(collection(db, 'posts', id, 'likes'), orderBy('timestamp', 'desc')),
+            query(collection(db, 'clubs',`${clubId}`,'activities', id, 'likes'), orderBy('timestamp', 'desc')),
             snapshot => {
                 setLikes(snapshot.docs);
             })
@@ -53,7 +55,7 @@ function ClubPost({
 
         const commentToSend = comment;
         setComment('');
-        await addDoc(collection(db, "posts", id, "comments"), {
+        await addDoc(collection(db, 'clubs',`${clubId}`,'activities',id,"comments"), {
             comment: commentToSend,
             username: session.user.name,
             userImg: session.user.image,
@@ -66,11 +68,11 @@ function ClubPost({
 
         if (hasLiked) {
             {/*@ts-ignore */}
-            await deleteDoc(doc(db, 'posts', id, 'likes', session.user.uid))
+            await deleteDoc(doc(db, 'clubs',`${clubId}`,'activities',id, 'likes', session.user.uid))
             console.log("unliked", id)
         } else {
             {/*@ts-ignore */}
-            await setDoc(doc(db, 'posts', id, 'likes', session.user.uid), {
+            await setDoc(doc(db, 'clubs',`${clubId}`,'activities', id, 'likes', session.user.uid), {
                 username: session.user.name
             });
             console.log('liked', id)
@@ -91,17 +93,16 @@ function ClubPost({
             {session && (<div className="flex justify-between px-4 pt-4">
                 <div className="flex space-x-4">
                     <HeartIcon
-                        className="btn"
+                        className="btnCus"
                         onClick={likePost}
                     />
-                    <ChatIcon className="btn" />
-                    <PaperAirplaneIcon className="btn" />
+                    <ChatIcon className="btnCus" />
+                    <PaperAirplaneIcon className="btnCus" />
                 </div>
-                <BookmarkIcon className="btn" />
+                <BookmarkIcon className="btnCus" />
             </div>)}
             {/* Caption */}
             <p className="p-5 truncate">
-                <span className="font-bold mr-1">{username} </span>
                 {caption}
             </p>
             {/* Comments */}

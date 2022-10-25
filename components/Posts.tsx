@@ -31,6 +31,7 @@ function Posts() {
                     userImg={post.data().profilePic}
                     img={post.data().image}
                     caption={post.data().caption}
+                    timestamp={post.data().timestamp}
                 />
             ))}
         </div>

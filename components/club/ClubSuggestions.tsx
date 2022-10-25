@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import { db } from '../firebase';
 
-export default function MyClubs() {
+export default function Members() {
 
   const [myClubs, setMyClubs] = useState([]);
   const { data: session } = useSession();

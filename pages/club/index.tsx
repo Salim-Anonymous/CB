@@ -11,7 +11,7 @@ const Home: NextPage = () => {
   return (
       <div className="bg-gray-50 h-screen overflow-y-scroll scrollbar-hide">
           <Head>
-                <title>Club Book</title>
+                <title>Clubs</title>
                 <link rel="icon" href="/favicon.ico" />
           </Head>
           {/*Header*/}
