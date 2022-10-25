@@ -1,6 +1,8 @@
 import { collection, doc, getDoc, onSnapshot, orderBy, query } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { clubActivityModal } from "../../atoms/clubAddActivityModal";
 import { db } from "../../firebase";
 import ClubPost from "./ClubPost";
 
@@ -10,6 +12,7 @@ function ClubPosts({ clubId }: { clubId: any }) {
     const [club, setClub] = useState({});
     const [activities, setActivities] = useState([]);
     const router = useRouter();
+    const [open, setOpen] = useRecoilState(clubActivityModal);
 
     useEffect(() => {
         const data = onSnapshot(
@@ -54,7 +57,7 @@ function ClubPosts({ clubId }: { clubId: any }) {
             <div className="bg-cover bg-center h-96 w-full" style={{ backgroundImage: "url('https://media.istockphoto.com/photos/forest-wooden-table-background-summer-sunny-meadow-with-green-grass-picture-id1353553203?b=1&k=20&m=1353553203&s=170667a&w=0&h=QTyTGI9tWQluIlkmwW0s7Q4z7R_IT8egpzzHjW3cSas=')" }}></div>
             <div className="flex justify-center -mt-10 md:-mt-40">
                 {/*@ts-ignore*/}
-                <img src={club.profileImage} alt="" className="h-24 w-24 md:h-64 md:w-64 rounded-full border-4 border-green-200 object-cover" />
+                <img src={club.profileImage} alt="" className="h-24 w-24 md:h-64 md:w-64 rounded-full border-4 border-red-500 object-cover" />
             </div>
             {/* button to route to memeber requests */}
             <div className="flex justify-center">
@@ -74,15 +77,16 @@ function ClubPosts({ clubId }: { clubId: any }) {
                     className="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold mt-4">See Members</button>
                 <button
                     onClick={() => { router.push(`/club/${clubId}/members`) }}
-                    className="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold mt-4">Create Activity</button>
-                <button
-                    onClick={() => { router.push(`/club/${clubId}/members`) }}
                     className="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold mt-4">Create News Feed</button>
+                <button
+                    onClick={() => { setOpen({
+                        isOpen: true,
+                        content: "open activity modal"
+                    }) }}
+                    className="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold mt-4">Create Activity</button>
             </div>
             {/* @ts-ignore */}
-            {activities.map((activity) => (<ClubPost key={activity.id} id={activity.id} clubId={`${clubId}`} username={activity.data().name} userImg={club.profileImage}
-                img={activity.data().image}
-                caption={activity.data().description}
+            {activities.map((activity) => (<ClubPost key={activity.id} id={activity.id} clubId={`${clubId}`} caption={activity.data().caption} img={activity.data().image} timestamp={activity.data().timestamp} username={activity.data().username} title={activity.data().title} scheduledTime={activity.data().scheduledTime} userImg={activity.data().profilePic}
             />
             ))}
         </div>

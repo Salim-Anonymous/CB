@@ -11,6 +11,7 @@ function ClubPost({
     username,
     userImg,
     img,
+    title,
     caption, }: {
         id: any,
         username: string,
@@ -18,6 +19,9 @@ function ClubPost({
         clubId: string,
         img: string,
         caption: string,
+        timestamp: any,
+        title: string,
+        scheduledTime: any,
     }) {
 
     const { data: session } = useSession();
@@ -85,10 +89,11 @@ function ClubPost({
             <div className="flex items-center p-5">
                 <img src={userImg} alt={username} className="rounded-full h-12 w-12 object-contain border p-1 mr-3" />
                 <p className="flex-1 font-bold">{username}</p>
+                <p className="flex-1 font-bold">{title}</p>
                 <DotsHorizontalIcon className="h-5" />
             </div>
             {/* Img */}
-            <img src={img} alt="" className="object-cover w-full rounded-md border" />
+            <img src={img} alt="" className="object-cover w-full rounded-sm border" />
             {/* Buttons */}
             {session && (<div className="flex justify-between px-4 pt-4">
                 <div className="flex space-x-4">

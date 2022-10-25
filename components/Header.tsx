@@ -66,8 +66,8 @@ function Header() {
                             content: "open modal"
                         })} className="navBtn" />
                         <UserGroupIcon
-                         onClick={()=>{router.push('/club')}}
-                         className="navBtn" />
+                            onClick={() => { router.push('/club') }}
+                            className="navBtn" />
                         <img
                             src={session?.user?.image}
                             alt="profile"

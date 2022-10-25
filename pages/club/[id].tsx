@@ -2,6 +2,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import type { NextPage } from 'next'
 import Head from "next/head";
 import { useRouter } from 'next/router';
+import ActivityModal from '../../components/club/ClubActivityModal';
 import ClubFeed from '../../components/club/ClubFeed';
 import Header from "../../components/Header";
 import { db } from '../../firebase';
@@ -21,6 +22,8 @@ const Home: NextPage = () => {
           <Header/>
           {/* Club Page*/}
           <ClubFeed clubId={clubId}/>
+
+          <ActivityModal />
       </div>);
 }
 
