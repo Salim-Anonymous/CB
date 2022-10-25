@@ -44,6 +44,7 @@ function Post({
     }, [db, id]);
 
     useEffect(() => {
+        {/*@ts-ignore*/}
         setHasLiked(likes.findIndex(like => like.id === session?.user?.uid) !== -1)
     }), [likes];
 
@@ -64,9 +65,11 @@ function Post({
     const likePost = async () => {
 
         if (hasLiked) {
+            {/*@ts-ignore*/}
             await deleteDoc(doc(db, 'posts', id, 'likes', session.user.uid))
             console.log("unliked", id)
         } else {
+            {/*@ts-ignore*/}
             await setDoc(doc(db, 'posts', id, 'likes', session.user.uid), {
                 username: session.user.name
             });

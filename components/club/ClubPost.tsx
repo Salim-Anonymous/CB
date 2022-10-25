@@ -44,6 +44,7 @@ function ClubPost({
     }, [db, id]);
 
     useEffect(() => {
+        {/*@ts-ignore */}
         setHasLiked(likes.findIndex(like => like.id === session?.user?.uid) !== -1)
     }), [likes];
 
@@ -64,9 +65,11 @@ function ClubPost({
     const likePost = async () => {
 
         if (hasLiked) {
+            {/*@ts-ignore */}
             await deleteDoc(doc(db, 'posts', id, 'likes', session.user.uid))
             console.log("unliked", id)
         } else {
+            {/*@ts-ignore */}
             await setDoc(doc(db, 'posts', id, 'likes', session.user.uid), {
                 username: session.user.name
             });
@@ -83,7 +86,7 @@ function ClubPost({
                 <DotsHorizontalIcon className="h-5" />
             </div>
             {/* Img */}
-            <img src={img} alt="" className="object-cover w-full rounded-3xl border" />
+            <img src={img} alt="" className="object-cover w-full rounded-md border" />
             {/* Buttons */}
             {session && (<div className="flex justify-between px-4 pt-4">
                 <div className="flex space-x-4">

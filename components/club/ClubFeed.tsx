@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import ClubList from "./ClubList";
 import ClubPosts from "./ClubPosts";
 
-function ClubFeed() {
+function ClubFeed({clubId}:{clubId:string|string[]}) {
 
     const { data: session } = useSession();
 
@@ -18,7 +18,7 @@ function ClubFeed() {
                 {/* Stories */}
                 {/* <Stories /> */}
                 {/* Posts */}
-                <ClubPosts />
+                <ClubPosts clubId={clubId}/>
             </section>
             {/* Section */}
             <section className="hidden xl:inline-grid md col-span-1">

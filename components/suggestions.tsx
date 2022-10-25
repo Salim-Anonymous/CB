@@ -48,7 +48,7 @@ export default function Suggestions() {
                         <h2 className='font-semibold text-sm'>{profile.firstName}</h2>
                         <h3 className='text-xs text-gray-400'>Works at {profile.subscriptionTier}</h3>
                     </div>
-                    <button className='text-blue-400 text-xs font-semibold'>Follow</button>
+                    <button className='text-blue-400 text-xs font-semibold'>Join</button>
                     </div>
             ))}
     </div>
