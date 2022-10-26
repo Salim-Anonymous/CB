@@ -16,6 +16,16 @@ function ClubList() {
     const [user, setUser] = useState({});
     const [isAdmin, setIsAdmin] = useState(false);
 
+    //get clubs
+    useEffect(() => {
+        const data = onSnapshot(
+            query(collection(db, 'clubs'), orderBy('createdAt', 'desc')),
+            snapshot => {
+                setClubs(snapshot.docs);
+            })
+        return () => { data() }
+    }, []);
+
 
     console.log(clubs)
 
