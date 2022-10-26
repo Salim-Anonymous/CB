@@ -23,7 +23,7 @@ function Posts() {
 
     return (
         <div className="">
-            {posts.map((post) => (
+            {posts.map((post,index) => (
                 <Post
                     key={post.id}
                     id={post.id}
