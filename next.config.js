@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['links.papareact.com'],
+    domains: ['links.papareact.com','firebasestorage.googleapis.com'],
   },
   eslint: {
     // Warning: This allows production builds to successfully complete even if

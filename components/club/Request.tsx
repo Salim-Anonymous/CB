@@ -14,7 +14,7 @@ function Request({ request, clubId }: { request: any, clubId: any }) {
             isAccepted: true,
         })
         //add user to club
-        setDoc(doc(db, 'clubs', `${clubId}`, 'members', request.id), {
+        setDoc(doc(db, 'clubs', `${clubId}`, 'members', `${request.data().uid}`), {
             username: request.data().username,
             userImg: request.data().userImg,
             timestamp: request.data().timestamp,
@@ -46,6 +46,8 @@ function Request({ request, clubId }: { request: any, clubId: any }) {
             setIsAccepted(doc.data().isAccepted);
         })
     }, []);
+
+    console.log(request.data().uid);
 
     //display requests
     return (

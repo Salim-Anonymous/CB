@@ -28,6 +28,7 @@ function Post({
     const [comments, setComments] = useState([]);
     const [likes, setLikes] = useState([]);
     const [hasLiked, setHasLiked] = useState(false);
+    const [hasCommented, setHasCommented] = useState(false);
     const checkClub = clubName !== null;
 
     useEffect(() => {
@@ -41,10 +42,16 @@ function Post({
     }, [db,id]);
 
     useEffect(() => {
+        // @ts-ignore
+        setHasCommented( comments.findIndex(comment => comment.id === session?.user?.uid) !== -1)
+    }), [comments];
+
+    useEffect(() => {
         const data = onSnapshot(
-            query(collection(db, 'posts', id, 'likes'), orderBy('timestamp', 'desc')),
+            query(collection(db, 'posts', id, 'likes')),
             snapshot => {
                 setLikes(snapshot.docs);
+                console.log("snap",snapshot.docs);
             })
         return () => { data() }
     }, [db, id]);
@@ -89,7 +96,7 @@ function Post({
             <div className="flex items-center p-5">
                 <img src={userImg} alt={username} className="rounded-full h-12 w-12 object-contain border p-1 mr-3" />
                 <p className="flex-1 font-bold">{username}</p>
-                <Moment fromNow className="pr-5 text-xs text-gray-400">
+                <Moment fromNow className="pr-5 text-xs text-gray-400 invisible md:visible">
                                 {timestamp?.toDate()}
                 </Moment>
                 {/* <DotsHorizontalIcon className="h-5" /> */}
@@ -106,17 +113,26 @@ function Post({
             {/* Buttons */}
             {session && (<div className="flex justify-between px-4 pt-4">
                 <div className="flex space-x-4">
-                    <HeartIcon
-                        className="btnCus"
-                        onClick={likePost}
-                    />
-                    <ChatIcon className="btnCus" />
-                    <PaperAirplaneIcon className="btnCus" />
+                    <div className="flex space-x-1 items-center justify-center">
+                        {hasLiked ? (
+                            <HeartIcon onClick={likePost} className="btnCus text-red-500" />) : (
+                            <HeartIcon onClick={likePost} className="btnCus" />)}
+                        {likes && (
+                            <p className="font-bold">{likes.length}</p>
+                        )}
+                    </div>
+                    <div className="flex space-x-1 items-center justify-center">
+                        {hasCommented ? (
+                            <ChatIcon onClick={likePost} className="btnCus text-blue-500" />) : (
+                            <ChatIcon onClick={likePost} className="btnCus" />)}
+                        {comments && (
+                            <p className="font-bold">{likes.length}</p>
+                        )}
+                    </div>
                 </div>
-                <BookmarkIcon className="btnCus" />
             </div>)}
             {/* Caption */}
-            <p className="p-5 truncate">
+            <p className="p-5">
                 <span className="font-bold mr-1">{username} </span>
                 {caption}
             </p>

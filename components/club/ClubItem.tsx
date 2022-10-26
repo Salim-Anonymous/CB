@@ -55,6 +55,19 @@ function ClubItem(
     // delete the club
     const deleteClub = async () => {
         await deleteDoc(doc(db, 'clubs', id));
+        //delete from all user's clubs collection
+        const q = query(collection(db, 'users'), orderBy('createdAt', 'desc'));
+        onSnapshot(q, (snapshot) => {
+            snapshot.docs.map((doc) => {
+                //@ts-ignore
+                if (doc.data().clubs.includes(id)) {
+                    //delete the club from the user's clubs collection
+                    //@ts-ignore
+                    const userRef = doc(db, 'users', doc.id, 'clubs', id);
+                    deleteDoc(userRef);
+                }
+            })
+        })
         router.push('/club');
     }
 
@@ -69,7 +82,7 @@ function ClubItem(
         });
 
         return unsubscribe;
-    }, [userId,id,db]);
+    }, [userId, id, db]);
     //check if user has already joined the club
     useEffect(() => {
         const data = onSnapshot(
@@ -98,7 +111,7 @@ function ClubItem(
         return () => { data() }
     }, []);
 
-
+    // display in
     return (
         <div className="flex flex-col md:flex-row bg-white my-7 border rounded-md p-5">
             {/* Img */}
@@ -110,53 +123,55 @@ function ClubItem(
                     className="m-5 text-2xl md:text-4xl cursor-pointer">
                     {name}
                 </div>
-                {hasAlreadyJoined ? (
-                    <div className="flex items-center justify-center space-x-2">
-                        <CheckIcon className="h-5 text-green-500" />
-                        <p className="text-green-500">Joined</p>
-                    </div>
-                ) : hasAlreadySentRequest ? (
-                    <div className="flex items-center justify-center space-x-2">
-                        <CheckIcon className="h-5 text-green-500" />
-                        <p className="text-green-500">Request Sent</p>
-                    </div>) : (<div>
-                        <label htmlFor="my-modal-6" className="btn modal-button">send request <UserAddIcon className="w-6 h-6 ml-8" /></label>
-                        <input type="checkbox" id="my-modal-6" className="modal-toggle" />
-
-                        <div className="modal modal-bottom sm:modal-middle">
-                            <div className="modal-box flex flex-col p-2 items-center justify-center">
-                                <input type="text" value={joinMessage} onChange={(e) => setJoinMessage(e.target.value)} className="border-emerald-500 focus:ring-2 focus:border-black w-full h-20 mt-5" />
-                                {sendingRequest ? (
-                                    <button className="inline-flex justify-center w-64 rounded-md border m-10
-                            border-transparent shadow-sm px-4 py-2 bg-black text-base
-                            font-medium text-white focus:outline-none
-                            focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:text-sm
-                            disabled:bg-gray-300 disabled:cursor-not-allowed hover:disabled:bg-gray-300"
-                                    >
-                                        Sending Request
-                                        <UserAddIcon className="w-6 h-6 ml-8" />
-                                    </button>
-                                ) : (
-                                    <button className="inline-flex justify-center w-64 rounded-md border m-10
-                                    border-transparent shadow-sm px-4 py-2 bg-black text-base
-                                    font-medium text-white hover:bg-green-600 focus:outline-none
-                                    focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:text-sm
-                                    disabled:bg-gray-300 disabled:cursor-not-allowed hover:disabled:bg-gray-300"
-                                        onClick={sendRequest}
-                                        disabled={reqestSent}
-                                    >
-                                        Send Request
-                                        <UserAddIcon className="w-6 h-6 ml-8" />
-                                    </button>
-                                )}
+                {session && (
+                    <div>
+                        {hasAlreadyJoined ? (
+                            <div className="flex items-center justify-center space-x-2">
+                                <CheckIcon className="h-5 text-green-500" />
+                                <p className="text-green-500">Joined</p>
                             </div>
-                        </div>
-                    </div>)}
-                {isAdmin && (
-                    <div className="flex items-center justify-center space-x-2">
+                        ) : hasAlreadySentRequest ? (
+                            <div className="flex items-center justify-center space-x-2">
+                                <CheckIcon className="h-5 text-green-500" />
+                                <p className="text-green-500">Request Sent</p>
+                            </div>) : (<div>
+                                <label htmlFor="my-modal-6" className="btn modal-button">send request <UserAddIcon className="w-6 h-6 ml-8" /></label>
+                                <input type="checkbox" id="my-modal-6" className="modal-toggle" />
 
-                        <label htmlFor="my-modal-4" className="btn modal-button bg-red-700">Delete Club</label>
+                                <div className="modal modal-bottom sm:modal-middle">
+                                    <div className="modal-box flex flex-col p-2 items-center justify-center">
+                                        <input type="text" value={joinMessage} onChange={(e) => setJoinMessage(e.target.value)} className="border-emerald-500 focus:ring-2 focus:border-black w-full h-20 mt-5" />
+                                        {sendingRequest ? (
+                                            <button className="inline-flex justify-center w-64 rounded-md border m-10
+                                border-transparent shadow-sm px-4 py-2 bg-black text-base
+                                font-medium text-white focus:outline-none
+                                focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:text-sm
+                                disabled:bg-gray-300 disabled:cursor-not-allowed hover:disabled:bg-gray-300"
+                                            >
+                                                Sending Request
+                                                <UserAddIcon className="w-6 h-6 ml-8" />
+                                            </button>
+                                        ) : (
+                                            <button className="inline-flex justify-center w-64 rounded-md border m-10
+                                        border-transparent shadow-sm px-4 py-2 bg-black text-base
+                                        font-medium text-white hover:bg-green-600 focus:outline-none
+                                        focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:text-sm
+                                        disabled:bg-gray-300 disabled:cursor-not-allowed hover:disabled:bg-gray-300"
+                                                onClick={sendRequest}
+                                                disabled={reqestSent}
+                                            >
+                                                Send Request
+                                                <UserAddIcon className="w-6 h-6 ml-8" />
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>)}
+                        {isAdmin && (
+                            <div className="flex items-center justify-center space-x-2">
 
+                                <label htmlFor="my-modal-4" className="btn modal-button bg-red-700">Delete Club</label>
+                            </div>)}
                     </div>)}
 
                 {/* Put this part before </body> tag */}

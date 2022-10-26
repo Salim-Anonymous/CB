@@ -81,39 +81,44 @@ function Header() {
                     <MenuIcon className="h-6 w-6 md:hidden
                 cursor-pointer"/>
                     {session ? (
-                    <>
-                    {/* <div className="relative navBtn ">
+                        <>
+                            {/* <div className="relative navBtn ">
                         <PaperAirplaneIcon className="navBtn rotate-45" />
                         <div className="absolute -top-1 -right-2 text-xs w-5 h-5
                     bg-red-500 rounded-full flex items-center justify-center
                     animate-pulse text-white">3</div>
                     </div> */}
-                        <PlusCircleIcon onClick={() => setOpen({
-                            isOpen: true,
-                            content: "open modal"
-                        })} className="navBtn" />
-                        <UserGroupIcon
-                            onClick={() => { router.push('/club') }}
-                            className="navBtn" />
-                        <img
-                            src={session?.user?.image}
-                            alt="profile"
-                            className="h-10 rounded-full cursor-pointer"
-                            onClick={() => signOut()}
-                        />
-                        {isAdmin && <button
-                            onClick={() => setCreateClub({
+                            <PlusCircleIcon onClick={() => setOpen({
                                 isOpen: true,
-                                content: "open club modal"
-                            })}
-                            className="bg-blue-500 text-white font-bold py-2 px-4 rounded-full"
-                        >Add Club</button>}
+                                content: "open modal"
+                            })} className="navBtn" />
+                            <UserGroupIcon
+                                onClick={() => { router.push('/club') }}
+                                className="navBtn" />
+                            <img
+                                src={session?.user?.image}
+                                alt="profile"
+                                className="h-10 rounded-full cursor-pointer"
+                                onClick={() => signOut()}
+                            />
+                            {isAdmin && <button
+                                onClick={() => setCreateClub({
+                                    isOpen: true,
+                                    content: "open club modal"
+                                })}
+                                className="bg-blue-500 text-white font-bold py-2 px-4 rounded-full"
+                            >Add Club</button>}
                         </>)
                         : (
-                            <button className="text-blue-400 font-semibold text-sm
+                            <>
+                                <UserGroupIcon
+                                    onClick={() => { router.push('/club') }}
+                                    className="navBtn" />
+                                <button className="text-blue-400 font-semibold text-sm
                         border border-blue-400 rounded-full py-1 px-2"
-                                onClick={() => { signIn() }}
-                            >Sign In</button>
+                                    onClick={() => { signIn() }}
+                                >Sign In</button>
+                            </>
                         )}
                 </div>
             </div>

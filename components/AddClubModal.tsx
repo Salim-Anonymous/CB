@@ -21,12 +21,15 @@ function AddClubModal() {
     const captionRef = useRef(null);
     const nameRef = useRef(null);
     const modRef = useRef(null);
+    const modData = useState([]);
 
+    //create the club
     const uploadPost = async()=>{
         if(loading) return;
         setLoading(true);
         console.log('adding club');
 
+        //add club to db
         const docRef = await addDoc(collection(db,'clubs'),{
             name:nameRef.current.value,
             caption:captionRef.current.value,
@@ -38,30 +41,80 @@ function AddClubModal() {
 
         console.log("New Doc Added to the collection with ID: ",docRef.id);
 
-        const imgRef = ref(storage,`posts/${docRef.id}/image`);
+        //store the image on /clubs
+        const imgRef = ref(storage,`clubs/${docRef.id}/image`);
 
         await uploadString(imgRef,selectedFile,'data_url').then(async(snapshot)=>{
             const downloadURL = await getDownloadURL(imgRef);
             await updateDoc(doc(db,'clubs',docRef.id),{
-                image:downloadURL,
+                profileImage:downloadURL,
             });
+
         },
         (error)=>{
             console.log(error);
         });
 
-        //add the moderator to the club
-        setDoc(doc(db, 'users', `${modRef.current.value}`, 'clubs', `${docRef.id}`), {
+        // search the users for the moderator
+        users.forEach((user) => {
+            console.log(user);
+            if(user.id == modRef.current.value){
+                console.log("found user");
+                modData[0] = user.data();
+            }
+        });
+
+        console.log(modData);
+
+        //query the club profileImage
+        let clubImg = '';
+        const clubRef = doc(db, 'clubs', docRef.id);
+        onSnapshot(clubRef, (doc) => {
+            clubImg = doc.data().profileImage;
+        });
+
+        //send and accept request to the club
+        const docRef2 = await addDoc(collection(db,'clubs',docRef.id,'requests'),{
+            clubImg: clubImg,
             clubName: nameRef.current.value,
-            clubImg: selectedFile,
+            isAccepted: true,
+            message: 'You have been added as a moderator',
+            timestamp: serverTimestamp(),
+            uid: modRef.current.value,
+            // @ts-ignore
+            userImg: modData[0].photoUrl,
+            // @ts-ignore
+            username: modData[0].username
+        });
+
+        console.log("New Doc Added to the collection with ID: ",docRef2.id);
+
+        //add the moderator to the club members collection
+        addDoc(collection(db, 'clubs', `${docRef.id}`, 'members'), {
+            uid: modRef.current.value,
+            timestamp: serverTimestamp(),
+            // @ts-ignore
+            userImg: modData[0].photoUrl,
+            // @ts-ignore
+            username: modData[0].username
+        })
+
+        //add the club to the user's clubs collection
+
+        addDoc(collection(db, 'users', `${modRef.current.value}`, 'clubs'), {
+            clubName: nameRef.current.value,
+            clubImg: clubImg,
             timestamp: serverTimestamp()
         })
+
+
 
         setLoading(false);
         setOpen({...open,isOpen:false});
         setSelectedFile(null);
 
     }
+
 
     const onClose = () => {
         setOpen({ ...open, isOpen: false });
@@ -182,7 +235,7 @@ function AddClubModal() {
                                             '
                                         onClick={uploadPost}
                                     >
-                                        {loading ? "Uploading..." : "Upload Post"}
+                                        {loading ? "Creating..." : "Create Club"}
                                     </button>
                                 </div>
                             </div>

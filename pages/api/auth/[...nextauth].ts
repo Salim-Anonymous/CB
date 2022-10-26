@@ -21,7 +21,7 @@ export const authOptions = {
   },
   callbacks:{
     async session({session,token,user}){
-      session.user.username = session.user.name.split(" ")[0].toLowerCase()
+      session.user.username = session.user.name
       session.user.uid = token.sub
       //store user data in firestore v9
       const userRef = doc(db,"users",session.user.uid);

@@ -22,6 +22,8 @@ function ClubFeed({clubId}:{clubId:string|string[]}) {
             </section>
             {/* Section */}
             <section className="hidden xl:inline-grid md col-span-1">
+            {session && (
+                    <>
                 <div className="fixed t-20">
                     {/* Mini Profile */}
                     <MiniProfile />
@@ -30,7 +32,9 @@ function ClubFeed({clubId}:{clubId:string|string[]}) {
                     <Suggestions />
                     <Members />
                 </div>
+                </>)}
             </section>
+
         </main>
     );
 }
