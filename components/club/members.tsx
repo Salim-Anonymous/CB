@@ -17,7 +17,7 @@ function Members() {
                 setMembers(snapshot.docs);
             })
         return () => { data() }
-    }, []);
+    }, [clubId]);
 
     //display requests
     return (

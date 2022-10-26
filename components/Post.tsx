@@ -38,7 +38,7 @@ function Post({
             })
 
         return () => { data() }
-    }, []);
+    }, [db,id]);
 
     useEffect(() => {
         const data = onSnapshot(

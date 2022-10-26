@@ -3,7 +3,7 @@ import { User } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
-import { db } from '../firebase';
+import { db } from '../../firebase';
 
 export default function Members() {
 

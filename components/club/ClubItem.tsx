@@ -69,7 +69,7 @@ function ClubItem(
         });
 
         return unsubscribe;
-    }, [userId]);
+    }, [userId,id,db]);
     //check if user has already joined the club
     useEffect(() => {
         const data = onSnapshot(
