@@ -50,6 +50,11 @@ function AddClubModal() {
             console.log(error);
         });
 
+        //add the moderator to the club
+        await updateDoc(doc(db,'users',modRef.current.value),{
+            clubs: [docRef.id]
+        });
+
         setLoading(false);
         setOpen({...open,isOpen:false});
         setSelectedFile(null);
