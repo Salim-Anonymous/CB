@@ -4,7 +4,7 @@ import { addClubModal} from '../atoms/addClubModal';
 import { Dialog, Transition } from '@headlessui/react';
 import { CameraIcon } from '@heroicons/react/outline';
 import { useEffect, useRef, useState } from 'react';
-import { addDoc, collection, doc, onSnapshot, query, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, onSnapshot, query, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import { useSession } from 'next-auth/react';
 import { db,storage } from '../firebase';
 
@@ -51,9 +51,11 @@ function AddClubModal() {
         });
 
         //add the moderator to the club
-        await updateDoc(doc(db,'users',modRef.current.value),{
-            clubs: [docRef.id]
-        });
+        setDoc(doc(db, 'users', `${modRef.current.value}`, 'clubs', `${docRef.id}`), {
+            clubName: nameRef.current.value,
+            clubImg: selectedFile,
+            timestamp: serverTimestamp()
+        })
 
         setLoading(false);
         setOpen({...open,isOpen:false});
