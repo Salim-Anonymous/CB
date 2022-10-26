@@ -3,6 +3,7 @@ import Head from "next/head";
 import Header from "../components/Header";
 import Feed from "../components/Feed";
 import Modal from '../components/Modal';
+import AddClubModal from '../components/AddClubModal';
 
 const Home: NextPage = () => {
   return (
@@ -17,6 +18,7 @@ const Home: NextPage = () => {
           <Feed />
           {/*Modal*/}
           <Modal />
+          <AddClubModal />
       </div>);
 }
 

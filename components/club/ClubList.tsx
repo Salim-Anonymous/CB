@@ -1,5 +1,5 @@
 import { ChatIcon, BookmarkIcon, DotsHorizontalIcon, HeartIcon, PaperAirplaneIcon, EmojiHappyIcon } from "@heroicons/react/outline";
-import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp } from "firebase/firestore";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase";
@@ -9,16 +9,13 @@ import ClubItem from "./ClubItem";
 function ClubList() {
 
     const [clubs, setClubs] = useState([]);
+    const { data: session } = useSession();
+    // @ts-ignore
+    const userId = session?.user?.uid;
+    // @ts-ignore
+    const [user, setUser] = useState({});
+    const [isAdmin, setIsAdmin] = useState(false);
 
-    useEffect(() => {
-        const data = onSnapshot(
-            query(collection(db, 'clubs'), orderBy('createdAt', 'desc')),
-            snapshot => {
-                setClubs(snapshot.docs);
-            })
-
-        return () => { data() }
-    }, []);
 
     console.log(clubs)
 

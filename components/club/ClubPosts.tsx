@@ -1,8 +1,10 @@
 import { collection, doc, getDoc, onSnapshot, orderBy, query } from "firebase/firestore";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { clubActivityModal } from "../../atoms/clubAddActivityModal";
+import { newsFeedModal } from "../../atoms/newsFeedModal";
 import { db } from "../../firebase";
 import ClubPost from "./ClubPost";
 
@@ -13,6 +15,25 @@ function ClubPosts({ clubId }: { clubId: any }) {
     const [activities, setActivities] = useState([]);
     const router = useRouter();
     const [open, setOpen] = useRecoilState(clubActivityModal);
+    const [openFeed, setOpenFeed] = useRecoilState(newsFeedModal);
+    const [isModerator, setIsModerator] = useState(false);
+    const {data: session} = useSession();
+    const [clubs, setClubs] = useState([]);
+
+    const [combinedPosts, setCombinedPosts] = useState([]);
+
+    //check if the user is moderator
+    useEffect(() => {
+        const unsubscribe = onSnapshot(doc(db, 'clubs', `${clubId}`), (doc) => {
+            setClub(doc.data());
+            // @ts-ignore
+            if (doc.data().moderators.includes(session?.user?.uid)) {
+                setIsModerator(true);
+            }
+        });
+
+        return unsubscribe;
+    }, [clubId]);
 
     useEffect(() => {
         const data = onSnapshot(
@@ -49,6 +70,8 @@ function ClubPosts({ clubId }: { clubId: any }) {
         }
         );
     }, [clubId, db]);
+
+
     console.log(club);
     console.log(activities);
     return (
@@ -68,23 +91,28 @@ function ClubPosts({ clubId }: { clubId: any }) {
                     <h3 className="text-xl font-semibold">{club.description}</h3>
                 </div>
             </div>
-            <div className="flex justify-center">
+            {isModerator && <div className="flex justify-center space-x-5">
                 <button
                     onClick={() => { router.push(`/club/${clubId}/requests`) }}
-                    className="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold mt-4">Member Requests</button>
+                    className="btnCus bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold mt-4">Member Requests</button>
                 <button
                     onClick={() => { router.push(`/club/${clubId}/members`) }}
-                    className="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold mt-4">See Members</button>
+                    className="btnCus bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold mt-4">See Members</button>
                 <button
-                    onClick={() => { router.push(`/club/${clubId}/members`) }}
-                    className="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold mt-4">Create News Feed</button>
+                    onClick={() => { 
+                        setOpenFeed({
+                            isOpen: true,
+                            content: "opened"
+                        })
+                    }}
+                    className="btnCus bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold mt-4">Create News Feed</button>
                 <button
                     onClick={() => { setOpen({
                         isOpen: true,
                         content: "open activity modal"
                     }) }}
-                    className="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold mt-4">Create Activity</button>
-            </div>
+                    className="btnCus bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold mt-4">Create Activity</button>
+            </div>}
             {/* @ts-ignore */}
             {activities.map((activity) => (<ClubPost key={activity.id} id={activity.id} clubId={`${clubId}`} caption={activity.data().caption} img={activity.data().image} timestamp={activity.data().timestamp} username={activity.data().username} title={activity.data().title} scheduledTime={activity.data().scheduledTime} userImg={activity.data().profilePic}
             />

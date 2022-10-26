@@ -5,6 +5,7 @@ import ClubList from '../../components/club/ClubList';
 import Feed from '../../components/Feed';
 import Header from "../../components/Header";
 import Modal from '../../components/Modal';
+import AddClubModal from '../../components/AddClubModal';
 
 
 const Home: NextPage = () => {

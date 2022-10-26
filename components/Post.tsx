@@ -9,6 +9,8 @@ function Post({
     id,
     username,
     userImg,
+    clubImg,
+    clubName,
     img,
     timestamp,
     caption, }: {
@@ -18,6 +20,8 @@ function Post({
         img: string,
         timestamp: any,
         caption: string,
+        clubName: string|null,
+        clubImg: string|null,
     }) {
 
     const { data: session } = useSession();
@@ -25,6 +29,7 @@ function Post({
     const [comments, setComments] = useState([]);
     const [likes, setLikes] = useState([]);
     const [hasLiked, setHasLiked] = useState(false);
+    const checkClub = clubName !== null;
 
     useEffect(() => {
         const data = onSnapshot(
@@ -88,7 +93,14 @@ function Post({
                 <Moment fromNow className="pr-5 text-xs text-gray-400">
                                 {timestamp?.toDate()}
                 </Moment>
-                <DotsHorizontalIcon className="h-5" />
+                {/* <DotsHorizontalIcon className="h-5" /> */}
+                {checkClub ? (
+                    <div className="flex items-center">
+                        <h2 className="text-sm font-semibold text-gray-400">{clubName}</h2>
+                        </div>
+                ) : (
+                    <div></div>
+                )}
             </div>
             {/* Img */}
             <img src={img} alt="" className="object-cover w-full rounded-3xl border" />
