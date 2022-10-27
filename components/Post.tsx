@@ -126,7 +126,7 @@ function Post({
                             <ChatIcon onClick={likePost} className="btnCus text-blue-500" />) : (
                             <ChatIcon onClick={likePost} className="btnCus" />)}
                         {comments && (
-                            <p className="font-bold">{likes.length}</p>
+                            <p className="font-bold">{comments.length}</p>
                         )}
                     </div>
                 </div>
